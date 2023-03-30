@@ -62,7 +62,7 @@ L.Control.SideBySide = L.Control.extend({
   getPosition: function () {
     var rangeValue = this._range.value
     var offset = (0.5 - rangeValue) * (2 * this.options.padding + this.options.thumbSize)
-    return this._map.getSize().x * rangeValue + offset
+    return this._map.getSize().y * rangeValue + offset
   },
 
   setPosition: noop,
@@ -75,7 +75,7 @@ L.Control.SideBySide = L.Control.extend({
 
     var container = this._container = L.DomUtil.create('div', 'leaflet-sbs', map._controlContainer)
 
-    this._divider = L.DomUtil.create('div', 'leaflet-sbs-divider', container)
+    this._divider = L.DomUtil.create('div', 'leaflet-sbs-divider-h', container)
     var range = this._range = L.DomUtil.create('input', 'leaflet-sbs-range', container)
     range.type = 'range'
     range.min = 0
@@ -119,16 +119,18 @@ L.Control.SideBySide = L.Control.extend({
   },
 
   _updateClip: function () {
+    
     var map = this._map
     var nw = map.containerPointToLayerPoint([0, 0])
     var se = map.containerPointToLayerPoint(map.getSize())
-    var clipX = nw.x + this.getPosition()
+    var clipX = nw.y + this.getPosition()
     var dividerX = this.getPosition()
 
-    this._divider.style.left = dividerX + 'px'
+    this._divider.style.bottom = dividerX + 'px'
     this.fire('dividermove', {x: dividerX})
-    var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
-    var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
+    
+    var clipLeft = 'rect(' + [nw.y, se.x, se.y-dividerX, nw.x].join('px,') + 'px)'
+    var clipRight = 'rect(' + [se.y-dividerX, se.x, se.y, nw.x].join('px,') + 'px)'
     if (this._leftLayer) {
       this._leftLayer.getContainer().style.clip = clipLeft
     }
