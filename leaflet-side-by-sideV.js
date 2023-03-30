@@ -26,7 +26,6 @@ function getRangeEvent (rangeInput) {
 }
 
 function cancelMapDrag () {
-  
   mapWasDragEnabled = this._map.dragging.enabled()
   mapWasTapEnabled = this._map.tap && this._map.tap.enabled()
   this._map.dragging.disable()
@@ -34,7 +33,6 @@ function cancelMapDrag () {
 }
 
 function uncancelMapDrag (e) {
-  debugger
   this._refocusOnMap(e)
   if (mapWasDragEnabled) {
     this._map.dragging.enable()
@@ -80,7 +78,7 @@ L.Control.SideBySideV = L.Control.extend({
     var container = this._container = L.DomUtil.create('div', 'leaflet-sbs', map._controlContainer)
 
     this._divider = L.DomUtil.create('div', 'leaflet-sbs-divider-h', container)
-    var range = this._range = L.DomUtil.create('input', 'leaflet-sbs-rangeV', container)
+    var range = this._range = L.DomUtil.create('input', 'leaflet-sbs-range', container)
     range.type = 'range'
     range.min = 0
     range.max = 1
@@ -178,8 +176,8 @@ L.Control.SideBySideV = L.Control.extend({
     map.on("move", this._updateClip, this);
     map.on("layeradd layerremove", this._updateLayers, this);
     L.DomEvent.on(range, getRangeEvent(range), this._updateClip, this);
-    // L.DomEvent.on(range, "touchstart", cancelMapDrag, this);
-    // L.DomEvent.on(range, "touchend", uncancelMapDrag, this);
+    L.DomEvent.on(range, "touchstart", cancelMapDrag, this);
+    L.DomEvent.on(range, "touchend", uncancelMapDrag, this);
     L.DomEvent.on(range, "mousedown", cancelMapDrag, this);
     L.DomEvent.on(range, "mouseup", uncancelMapDrag, this);
   },
@@ -189,8 +187,8 @@ L.Control.SideBySideV = L.Control.extend({
     var map = this._map;
     if (range) {
       L.DomEvent.off(range, getRangeEvent(range), this._updateClip, this);
-      // L.DomEvent.off(range, "touchstart", cancelMapDrag, this);
-      // L.DomEvent.off(range, "touchend", uncancelMapDrag, this);
+      L.DomEvent.off(range, "touchstart", cancelMapDrag, this);
+      L.DomEvent.off(range, "touchend", uncancelMapDrag, this);
       L.DomEvent.off(range, "mousedown", cancelMapDrag, this);
       L.DomEvent.off(range, "mouseup", uncancelMapDrag, this);
     }
@@ -210,7 +208,7 @@ module.exports = L.Control.SideBySideV
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./layout.css":2,"./range.css":4}],2:[function(require,module,exports){
 var inject = require('./node_modules/_cssify@1.0.3@cssify');
-var css = ".leaflet-sbs-rangeV {\r\n    position: absolute;\r\n    left: 50%;\r\n    height: 100%;\r\n    z-index: 999;\r\n}\r\n\r\n\r\n\r\n\r\n.leaflet-sbs-divider {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 50%;\r\n    margin-left: -2px;\r\n    width: 4px;\r\n    background-color: #fff;\r\n    pointer-events: none;\r\n    z-index: 999;\r\n}\r\n\r\n\r\n.leaflet-sbs-divider-h {\r\n    position: absolute;\r\n    left: 0;\r\n    right: 0;\r\n    bottom: 50%;\r\n    margin-bottom: -2px;\r\n    height: 4px;\r\n    background-color: #fff;\r\n    pointer-events: none;\r\n    z-index: 999;\r\n}\r\n";
+var css = ".leaflet-sbs-range {\r\n    position: absolute;\r\n    left: 50%;\r\n    height: 100%;\r\n    z-index: 999;\r\n}\r\n\r\n\r\n\r\n\r\n.leaflet-sbs-divider {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 50%;\r\n    margin-left: -2px;\r\n    width: 4px;\r\n    background-color: #fff;\r\n    pointer-events: none;\r\n    z-index: 999;\r\n}\r\n\r\n\r\n.leaflet-sbs-divider-h {\r\n    position: absolute;\r\n    left: 0;\r\n    right: 0;\r\n    bottom: 50%;\r\n    margin-bottom: -2px;\r\n    height: 4px;\r\n    background-color: #fff;\r\n    pointer-events: none;\r\n    z-index: 999;\r\n}\r\n";
 inject(css, undefined, '_1olc7gi');
 module.exports = css;
 
@@ -271,7 +269,7 @@ module.exports.byUrl = function (url) {
 
 },{}],4:[function(require,module,exports){
 var inject = require('./node_modules/_cssify@1.0.3@cssify');
-var css = ".leaflet-sbs-rangeV {\r\n    -webkit-appearance: slider-vertical;\r\n    display: inline-block!important;\r\n    vertical-align: middle;\r\n    width: 0;\r\n    padding: 0;\r\n    margin: 0;\r\n    border: 0;\r\n    background: rgba(0, 0, 0, 0.25);\r\n    min-height: 100px;\r\n    cursor: pointer;\r\n    pointer-events: none;\r\n    z-index: 999;\r\n}\r\n.leaflet-sbs-rangeV::-ms-fill-upper {\r\n    background: transparent;\r\n}\r\n.leaflet-sbs-rangeV::-ms-fill-lower {\r\n    background: rgba(255, 255, 255, 0.25);\r\n}\r\n/* Browser thingies */\r\n\r\n.leaflet-sbs-rangeV::-moz-range-track {\r\n    opacity: 0;\r\n}\r\n.leaflet-sbs-rangeV::-ms-track {\r\n    opacity: 0;\r\n}\r\n.leaflet-sbs-rangeV::-ms-tooltip {\r\n    display: none;\r\n}\r\n/* For whatever reason, these need to be defined\r\n * on their own so dont group them */\r\n\r\n.leaflet-sbs-rangeV::-webkit-slider-thumb {\r\n    -webkit-appearance: none;\r\n    margin: 0;\r\n    padding: 0;\r\n    background: #fff;\r\n    height: 40px;\r\n    width: 40px;\r\n    border-radius: 20px;\r\n    cursor: ew-resize;\r\n    pointer-events: auto;\r\n    border: 1px solid #ddd;\r\n    background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAABlBMVEV9fX3///+Kct39AAAAAnRSTlP/AOW3MEoAAAA9SURBVFjD7dehDQAwDANBZ/+l2wmKoiqR7pHRcaeaCxAIBAL/g7k9JxAIBAKBQCAQCAQC14H+MhAIBE4CD3fOFvGVBzhZAAAAAElFTkSuQmCC\");\r\n    background-position: 50% 50%;\r\n    background-repeat: no-repeat;\r\n    background-size: 40px 40px;\r\n}\r\n.leaflet-sbs-rangeV::-ms-thumb {\r\n    margin: 0;\r\n    padding: 0;\r\n    background: #fff;\r\n    height: 40px;\r\n    width: 40px;\r\n    border-radius: 20px;\r\n    cursor: ew-resize;\r\n    pointer-events: auto;\r\n    border: 1px solid #ddd;\r\n    background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAABlBMVEV9fX3///+Kct39AAAAAnRSTlP/AOW3MEoAAAA9SURBVFjD7dehDQAwDANBZ/+l2wmKoiqR7pHRcaeaCxAIBAL/g7k9JxAIBAKBQCAQCAQC14H+MhAIBE4CD3fOFvGVBzhZAAAAAElFTkSuQmCC\");\r\n    background-position: 50% 50%;\r\n    background-repeat: no-repeat;\r\n    background-size: 40px 40px;\r\n}\r\n.leaflet-sbs-rangeV::-moz-range-thumb {\r\n    padding: 0;\r\n    right: 0    ;\r\n    background: #fff;\r\n    height: 40px;\r\n    width: 40px;\r\n    border-radius: 20px;\r\n    cursor: ew-resize;\r\n    pointer-events: auto;\r\n    border: 1px solid #ddd;\r\n    background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAABlBMVEV9fX3///+Kct39AAAAAnRSTlP/AOW3MEoAAAA9SURBVFjD7dehDQAwDANBZ/+l2wmKoiqR7pHRcaeaCxAIBAL/g7k9JxAIBAKBQCAQCAQC14H+MhAIBE4CD3fOFvGVBzhZAAAAAElFTkSuQmCC\");\r\n    background-position: 50% 50%;\r\n    background-repeat: no-repeat;\r\n    background-size: 40px 40px;\r\n}\r\n.leaflet-sbs-rangeV:disabled::-moz-range-thumb {\r\n    cursor: default;\r\n}\r\n.leaflet-sbs-rangeV:disabled::-ms-thumb {\r\n    cursor: default;\r\n}\r\n.leaflet-sbs-rangeV:disabled::-webkit-slider-thumb {\r\n    cursor: default;\r\n}\r\n.leaflet-sbs-rangeV:disabled {\r\n    cursor: default;\r\n}\r\n.leaflet-sbs-rangeV:focus {\r\n    outline: none!important;\r\n}\r\n.leaflet-sbs-rangeV::-moz-focus-outer {\r\n    border: 0;\r\n}\r\n\r\n";
+var css = ".leaflet-sbs-range {\r\n    -webkit-appearance: slider-vertical;\r\n    display: inline-block!important;\r\n    vertical-align: middle;\r\n    width: 0;\r\n    padding: 0;\r\n    margin: 0;\r\n    border: 0;\r\n    background: rgba(0, 0, 0, 0.25);\r\n    min-height: 100px;\r\n    cursor: pointer;\r\n    pointer-events: none;\r\n    z-index: 999;\r\n}\r\n.leaflet-sbs-range::-ms-fill-upper {\r\n    background: transparent;\r\n}\r\n.leaflet-sbs-range::-ms-fill-lower {\r\n    background: rgba(255, 255, 255, 0.25);\r\n}\r\n/* Browser thingies */\r\n\r\n.leaflet-sbs-range::-moz-range-track {\r\n    opacity: 0;\r\n}\r\n.leaflet-sbs-range::-ms-track {\r\n    opacity: 0;\r\n}\r\n.leaflet-sbs-range::-ms-tooltip {\r\n    display: none;\r\n}\r\n/* For whatever reason, these need to be defined\r\n * on their own so dont group them */\r\n\r\n.leaflet-sbs-range::-webkit-slider-thumb {\r\n    -webkit-appearance: none;\r\n    margin: 0;\r\n    padding: 0;\r\n    background: #fff;\r\n    height: 40px;\r\n    width: 40px;\r\n    border-radius: 20px;\r\n    cursor: ew-resize;\r\n    pointer-events: auto;\r\n    border: 1px solid #ddd;\r\n    background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAABlBMVEV9fX3///+Kct39AAAAAnRSTlP/AOW3MEoAAAA9SURBVFjD7dehDQAwDANBZ/+l2wmKoiqR7pHRcaeaCxAIBAL/g7k9JxAIBAKBQCAQCAQC14H+MhAIBE4CD3fOFvGVBzhZAAAAAElFTkSuQmCC\");\r\n    background-position: 50% 50%;\r\n    background-repeat: no-repeat;\r\n    background-size: 40px 40px;\r\n}\r\n.leaflet-sbs-range::-ms-thumb {\r\n    margin: 0;\r\n    padding: 0;\r\n    background: #fff;\r\n    height: 40px;\r\n    width: 40px;\r\n    border-radius: 20px;\r\n    cursor: ew-resize;\r\n    pointer-events: auto;\r\n    border: 1px solid #ddd;\r\n    background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAABlBMVEV9fX3///+Kct39AAAAAnRSTlP/AOW3MEoAAAA9SURBVFjD7dehDQAwDANBZ/+l2wmKoiqR7pHRcaeaCxAIBAL/g7k9JxAIBAKBQCAQCAQC14H+MhAIBE4CD3fOFvGVBzhZAAAAAElFTkSuQmCC\");\r\n    background-position: 50% 50%;\r\n    background-repeat: no-repeat;\r\n    background-size: 40px 40px;\r\n}\r\n.leaflet-sbs-range::-moz-range-thumb {\r\n    padding: 0;\r\n    right: 0    ;\r\n    background: #fff;\r\n    height: 40px;\r\n    width: 40px;\r\n    border-radius: 20px;\r\n    cursor: ew-resize;\r\n    pointer-events: auto;\r\n    border: 1px solid #ddd;\r\n    background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAABlBMVEV9fX3///+Kct39AAAAAnRSTlP/AOW3MEoAAAA9SURBVFjD7dehDQAwDANBZ/+l2wmKoiqR7pHRcaeaCxAIBAL/g7k9JxAIBAKBQCAQCAQC14H+MhAIBE4CD3fOFvGVBzhZAAAAAElFTkSuQmCC\");\r\n    background-position: 50% 50%;\r\n    background-repeat: no-repeat;\r\n    background-size: 40px 40px;\r\n}\r\n.leaflet-sbs-range:disabled::-moz-range-thumb {\r\n    cursor: default;\r\n}\r\n.leaflet-sbs-range:disabled::-ms-thumb {\r\n    cursor: default;\r\n}\r\n.leaflet-sbs-range:disabled::-webkit-slider-thumb {\r\n    cursor: default;\r\n}\r\n.leaflet-sbs-range:disabled {\r\n    cursor: default;\r\n}\r\n.leaflet-sbs-range:focus {\r\n    outline: none!important;\r\n}\r\n.leaflet-sbs-range::-moz-focus-outer {\r\n    border: 0;\r\n}\r\n\r\n";
 inject(css, undefined, '_st911j');
 module.exports = css;
 

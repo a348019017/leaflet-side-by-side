@@ -24,6 +24,7 @@ function getRangeEvent (rangeInput) {
 }
 
 function cancelMapDrag () {
+  
   mapWasDragEnabled = this._map.dragging.enabled()
   mapWasTapEnabled = this._map.tap && this._map.tap.enabled()
   this._map.dragging.disable()
@@ -31,6 +32,7 @@ function cancelMapDrag () {
 }
 
 function uncancelMapDrag (e) {
+  debugger
   this._refocusOnMap(e)
   if (mapWasDragEnabled) {
     this._map.dragging.enable()
@@ -76,7 +78,7 @@ L.Control.SideBySideV = L.Control.extend({
     var container = this._container = L.DomUtil.create('div', 'leaflet-sbs', map._controlContainer)
 
     this._divider = L.DomUtil.create('div', 'leaflet-sbs-divider-h', container)
-    var range = this._range = L.DomUtil.create('input', 'leaflet-sbs-range', container)
+    var range = this._range = L.DomUtil.create('input', 'leaflet-sbs-rangeV', container)
     range.type = 'range'
     range.min = 0
     range.max = 1
@@ -174,8 +176,8 @@ L.Control.SideBySideV = L.Control.extend({
     map.on("move", this._updateClip, this);
     map.on("layeradd layerremove", this._updateLayers, this);
     L.DomEvent.on(range, getRangeEvent(range), this._updateClip, this);
-    L.DomEvent.on(range, "touchstart", cancelMapDrag, this);
-    L.DomEvent.on(range, "touchend", uncancelMapDrag, this);
+    // L.DomEvent.on(range, "touchstart", cancelMapDrag, this);
+    // L.DomEvent.on(range, "touchend", uncancelMapDrag, this);
     L.DomEvent.on(range, "mousedown", cancelMapDrag, this);
     L.DomEvent.on(range, "mouseup", uncancelMapDrag, this);
   },
@@ -185,8 +187,8 @@ L.Control.SideBySideV = L.Control.extend({
     var map = this._map;
     if (range) {
       L.DomEvent.off(range, getRangeEvent(range), this._updateClip, this);
-      L.DomEvent.off(range, "touchstart", cancelMapDrag, this);
-      L.DomEvent.off(range, "touchend", uncancelMapDrag, this);
+      // L.DomEvent.off(range, "touchstart", cancelMapDrag, this);
+      // L.DomEvent.off(range, "touchend", uncancelMapDrag, this);
       L.DomEvent.off(range, "mousedown", cancelMapDrag, this);
       L.DomEvent.off(range, "mouseup", uncancelMapDrag, this);
     }
