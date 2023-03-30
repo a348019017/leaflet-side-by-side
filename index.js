@@ -47,7 +47,7 @@ function asArray (arg) {
 
 function noop () {}
 
-L.Control.SideBySide = L.Control.extend({
+L.Control.SideBySideV = L.Control.extend({
   options: {
     thumbSize: 42,
     padding: 0
@@ -197,8 +197,8 @@ L.Control.SideBySide = L.Control.extend({
   },
 })
 
-L.control.sideBySide = function (leftLayers, rightLayers, options) {
-  return new L.Control.SideBySide(leftLayers, rightLayers, options)
+L.control.sideBySideV = function (leftLayers, rightLayers, options) {
+  return new L.Control.SideBySideV(leftLayers, rightLayers, options)
 }
 
-module.exports = L.Control.SideBySide
+module.exports = L.Control.SideBySideV
